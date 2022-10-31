@@ -56,7 +56,7 @@ class GroupBy:
             By parameter with all DataFrames casted to Series.
         """
 
-        def try_cast_series(df: pandas.DataFrame):
+        def try_cast_series(df: pandas.DataFrame) -> pandas.DataFrame:
             """Cast one-column frame to Series."""
             if isinstance(df, pandas.DataFrame):
                 df = df.squeeze(axis=1)
@@ -76,7 +76,7 @@ class GroupBy:
 
     @classmethod
     def inplace_applyier_builder(
-        cls, key: callable, func: Optional[Union[callable, str]] = None
+        cls, key: Callable, func: Optional[Union[Callable, str]] = None
     ) -> Callable:
         """
         Bind actual aggregation function to the GroupBy aggregation method.
@@ -96,13 +96,13 @@ class GroupBy:
         """
         inplace_args = [] if func is None else [func]
 
-        def inplace_applyier(grp, *func_args, **func_kwargs):
+        def inplace_applyier(grp: Any, *func_args: Any, **func_kwargs: Any) -> Any:
             return key(grp, *inplace_args, *func_args, **func_kwargs)
 
         return inplace_applyier
 
     @classmethod
-    def get_func(cls, key: Union[str, callable], **kwargs: Any) -> Callable:
+    def get_func(cls, key: Union[str, Callable], **kwargs: Any) -> Callable:
         """
         Extract aggregation function from groupby arguments.
 
@@ -135,7 +135,7 @@ class GroupBy:
             return cls.inplace_applyier_builder(key)
 
     @classmethod
-    def build_aggregate_method(cls, key: Union[str, callable]) -> Callable:
+    def build_aggregate_method(cls, key: Union[str, Callable]) -> Callable:
         """
         Build function for `QueryCompiler.groupby_agg` that can be executed as default-to-pandas.
 
@@ -153,11 +153,11 @@ class GroupBy:
 
         def fn(
             df: pandas.DataFrame,
-            by,
-            axis,
-            groupby_kwargs,
-            agg_args,
-            agg_kwargs,
+            by: Any,
+            axis: int,
+            groupby_kwargs: dict,
+            agg_args: list,
+            agg_kwargs: dict,
             drop=False,
             **kwargs,
         ):
@@ -173,7 +173,7 @@ class GroupBy:
         return fn
 
     @classmethod
-    def build_groupby_reduce_method(cls, agg_func: Union[callable, str]):
+    def build_groupby_reduce_method(cls, agg_func: Union[Callable, str]) -> Callable:
         """
         Build function for `QueryCompiler.groupby_*` that can be executed as default-to-pandas.
 
@@ -190,7 +190,7 @@ class GroupBy:
         """
 
         def fn(
-            df, by, axis, groupby_kwargs, agg_args, agg_kwargs, drop=False, **kwargs
+            df: pandas.DataFrame, by: Any, axis: int, groupby_kwargs: dict, agg_args: list, agg_kwargs: dict, drop: bool =False, **kwargs: Any
         ):
             """Group DataFrame and apply aggregation function to each group."""
             if not isinstance(by, (pandas.Series, pandas.DataFrame)):
@@ -257,12 +257,12 @@ class GroupBy:
         return fn
 
     @classmethod
-    def is_aggregate(cls, key):  # noqa: PR01
+    def is_aggregate(cls, key: Any) -> Any:  # noqa: PR01
         """Check whether `key` is an alias for pandas.GroupBy.aggregation method."""
         return key in cls.agg_aliases
 
     @classmethod
-    def build_groupby(cls, func: Union[callable, str]) -> Callable:
+    def build_groupby(cls, func: Union[Callable, str]) -> Callable:
         """
         Build function that groups DataFrame and applies aggregation function to the every group.
 

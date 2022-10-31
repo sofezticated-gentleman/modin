@@ -44,7 +44,7 @@ class ObjTypeDeterminer:
             Function that takes DataFrame and executes `key` function on it.
         """
 
-        def func(df, *args: Any, **kwargs : Any) -> Any:
+        def func(df: Any, *args: Any, **kwargs : Any) -> Any:
             """Access specified attribute of the passed object and call it if it's callable."""
             prop = getattr(df, key)
             if callable(prop):
