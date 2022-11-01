@@ -36,9 +36,7 @@ class GroupBy:
     ]
 
     @classmethod
-    def validate_by(
-        cls, by: Union[pandas.DataFrame, pandas.Series, list]
-    ) -> Any:
+    def validate_by(cls, by: Union[pandas.DataFrame, pandas.Series, list]) -> Any:
         """
         Build valid `by` parameter for `pandas.DataFrame.groupby`.
 
@@ -190,7 +188,14 @@ class GroupBy:
         """
 
         def fn(
-            df: pandas.DataFrame, by: Any, axis: int, groupby_kwargs: dict, agg_args: list, agg_kwargs: dict, drop: bool =False, **kwargs: Any
+            df: pandas.DataFrame,
+            by: Any,
+            axis: int,
+            groupby_kwargs: dict,
+            agg_args: list,
+            agg_kwargs: dict,
+            drop: bool = False,
+            **kwargs: Any,
         ):
             """Group DataFrame and apply aggregation function to each group."""
             if not isinstance(by, (pandas.Series, pandas.DataFrame)):

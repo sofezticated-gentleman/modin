@@ -44,7 +44,7 @@ class ObjTypeDeterminer:
             Function that takes DataFrame and executes `key` function on it.
         """
 
-        def func(df: Any, *args: Any, **kwargs : Any) -> Any:
+        def func(df: Any, *args: Any, **kwargs: Any) -> Any:
             """Access specified attribute of the passed object and call it if it's callable."""
             prop = getattr(df, key)
             if callable(prop):
@@ -71,7 +71,13 @@ class DefaultMethod(Operator):
     DEFAULT_OBJECT_TYPE = ObjTypeDeterminer
 
     @classmethod
-    def register(cls, func: Union[Callable, str], obj_type: Optional[object] =None, inplace: Optional[boolean]=None, fn_name: Optional[str]=None) -> Callable:
+    def register(
+        cls,
+        func: Union[Callable, str],
+        obj_type: Optional[object] = None,
+        inplace: Optional[boolean] = None,
+        fn_name: Optional[str] = None,
+    ) -> Callable:
         """
         Build function that do fallback to default pandas implementation for passed `func`.
 
@@ -108,7 +114,9 @@ class DefaultMethod(Operator):
         if type(fn) == property:
             fn = cls.build_property_wrapper(fn)
 
-        def applyier(df: pandas.DataFrame, *args: Any, **kwargs: Any) -> (pandas.DataFrame | Any) :
+        def applyier(
+            df: pandas.DataFrame, *args: Any, **kwargs: Any
+        ) -> (pandas.DataFrame | Any):
             """
             Apply target function to the casted to pandas frame.
 
@@ -242,7 +250,7 @@ class DefaultMethod(Operator):
         return wrapper
 
     @classmethod
-    def frame_wrapper(cls, df: pandas.DataFrame) -> pandas.DataFrame :
+    def frame_wrapper(cls, df: pandas.DataFrame) -> pandas.DataFrame:
         """
         Extract frame property to apply function on.
 
